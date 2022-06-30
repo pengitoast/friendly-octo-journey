@@ -9,11 +9,12 @@ export default class Deck {
     get numberOfCards() {
         return this.cards.length
     }
+    //the shuffle function is basically a durstenfeld shuffle, but a better version from Fisher-Yates. 
     shuffle() {
         for (let i = this.numberOfCards - 1; i > 0; i--) {
             const newIndex = Math.floor(Math.random() * (i + 1))
             const oldValue = this.cards[newIndex]
-            this.card[newIndex] = this.cards[i]
+            this.cards[newIndex] = this.cards[i]
             this.cards[i] = oldValue
         }
     }
@@ -24,6 +25,18 @@ class Card {
     constructor(suit, value) {
         this.suit = suit
         this.value = value
+    }
+
+    get color() {
+        return this.suit === '♣' || this.suit === '♠' ? 'black' : 'red'
+    }
+//getHTML creates the card element, displays the value, and changes color depending on the suit (red or black).
+    getHTML() {
+        const cardDiv = document.createElement('div')
+        cardDiv.innerText = this.suit
+        cardDiv.classList.add("card", this.color)
+        cardDiv.dataset.value = `${this.value} ${this.suit}`
+        return cardDiv
     }
 }
 
