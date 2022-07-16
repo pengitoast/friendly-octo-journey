@@ -9,6 +9,16 @@ export default class Deck {
     get numberOfCards() {
         return this.cards.length
     }
+
+    //pop() returns the first card in the deck
+    pop() {
+        return this.cards.shift()
+    }
+    //push(card) puts card(s) at the bottom of the deck
+    push(card) {
+        this.cards.push(card)
+    }
+    
     //the shuffle function is basically a durstenfeld shuffle, but a better version from Fisher-Yates. 
     shuffle() {
         for (let i = this.numberOfCards - 1; i > 0; i--) {
