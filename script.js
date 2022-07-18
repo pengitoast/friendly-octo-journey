@@ -1,5 +1,5 @@
 import Deck from "./deck.js"
-
+import Card from "./deck.js"
 //CARD_VALUE_MAP is an object that is used to compare card values; in the card game 'War', the higher value takes all and adds to their deck.
 const CARD_VALUE_MAP = {
     "2": 2,
@@ -23,10 +23,15 @@ const playerDeckElement = document.querySelector('.player-deck')
 const playerCardSlot = document.querySelector('.player-card-slot')
 const text = document.querySelector('.text')
 
-let playerDeck, computerDeck, inRound;
+let playerDeck, computerDeck, inRound, endGame;
 
 
 document.addEventListener('click', () => {
+    if(endGame) {
+        startGame()
+        return
+    }
+    
     if (inRound) {
         cleanBeforeRound()
     } else {
@@ -43,6 +48,7 @@ function startGame() {
   playerDeck = new Deck(deck.cards.slice(0, deckMidpoint))
   computerDeck = new Deck(deck.cards.slice(deckMidpoint, deck.numberOfCards))
   inRound = false
+  endGame = false
 
     console.log(playerDeck)
     console.log(computerDeck)
@@ -73,14 +79,22 @@ function flipCards(){
         text.innerText = "Win"
         playerDeck.push(playerCard)
         playerDeck.push(computerCard)
-    } else if (isRoundWinner(playerCard, computerCard)) {
-        text.innerText = "Win"
+    } else if (isRoundWinner(computerCard, playerCard)) {
+        text.innerText = "Lose"
         computerDeck.push(playerCard)
         computerDeck.push(computerCard)
     } else {
         text.innerHTML = "Draw"
         playerDeck.push(playerCard)
         computerDeck.push(computerCard)
+    }
+
+    if (isGameOver(playerDeck)) {
+        text.innerText = 'You Lose!!!'
+        endGame = true;
+    } else if (isGameOver(computerDeck)) {
+        text.innerText = 'You Win!!!'
+        endGame = true;
     }
 }
 
@@ -91,4 +105,8 @@ function updateDeckCount() {
 
 function isRoundWinner(cardOne, cardTwo) {
     return CARD_VALUE_MAP[cardOne.value] > CARD_VALUE_MAP[cardTwo.value]
+}
+
+function isGameOver(deck) {
+    return deck.numberOfCards === 0
 }
